@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="bg">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FMI Prep - Начало</title>
+        <!-- Linked Global CSS -->
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <nav>FMI Prep Platform</nav>
+
+        <header class="hero">
+            <h1>Платформа за подготовка за ФМИ</h1>
+            <h1>Избери тип изпит</h1>
+        </header>
+
+        <div class="home-container">
+            <!-- University Card -->
+            <div class="card card-uni" onclick="window.location.href = 'exam_list.html?type=university'">
+                <div class="icon">🎓</div>
+                <h2>Кандидат-студентски</h2>
+                <p>Писмени конкурсни изпити по Математика за ФМИ</p>
+                <span class="btn">Виж тестове</span>
+            </div>
+
+            <!-- Matura Card -->
+            <div class="card card-matura" onclick="window.location.href = 'exam_list.html?type=matura'">
+                <div class="icon">📝</div>
+                <h2>Матура (ДЗИ)</h2>
+                <p>Държавни зрелостни изпити по Математика, Профилирана Подготовка</p>
+                <span class="btn">Виж тестове</span>
+            </div>
+        </div>
+    </body>
+</html>

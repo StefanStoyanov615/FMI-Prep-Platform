@@ -1,0 +1,285 @@
+/* --- GLOBAL VARIABLES --- */
+:root {
+    --primary: #003366; /* Sofia Uni Blue */
+    --secondary: #fca311; /* Matura Orange */
+    --bg-color: #f4f7f6;
+    --white: #ffffff;
+    --text-color: #333;
+    --correct: #28a745;
+    --wrong: #dc3545;
+}
+
+/* --- RESET & BODY --- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- NAVIGATION (Global) --- */
+nav {
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* --- INDEX PAGE STYLES --- */
+.hero {
+    text-align: center;
+    /* Променихме padding-a: 3rem отгоре, 1rem отстрани, 0 отдолу */
+    padding: 3rem 1rem 0.5rem 1rem;
+}
+
+.hero h1 {
+    color: var(--primary);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+}
+
+.home-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding: 20px;
+    flex: 1;
+    /* ВАЖНО: Променихме от 'center' на 'flex-start', за да отидат горе */
+    align-items: flex-start;
+}
+
+.card {
+    background: var(--white);
+
+    /* ПРОМЯНА 1: Увеличи ширината от 300px на 400px или повече */
+    width: 420px;
+
+    /* ПРОМЯНА 2: Намали отстъпа отстрани, за да има повече място за текст */
+    padding: 2rem 1.5rem;
+
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-top: 5px solid transparent;
+
+    /* ПРОМЯНА 3: Добави това, за да подравниш бутоните най-долу, ако текстовете са разл. дължина */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 350px; /* Фиксирана височина */
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-uni {
+    border-color: var(--primary);
+}
+.card-matura {
+    border-color: var(--secondary);
+}
+
+.icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.card h2 {
+    color: var(--primary);
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+.btn {
+    display: inline-block;
+    padding: 10px 25px;
+    border-radius: 20px;
+    background: var(--primary);
+    color: white;
+    font-weight: bold;
+    margin-top: 15px;
+}
+.card-matura .btn {
+    background: var(--secondary);
+    color: black;
+}
+
+/* --- LIST PAGE STYLES --- */
+.list-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.page-title {
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.exam-item {
+    background: var(--white);
+    padding: 20px 25px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    border-left: 5px solid var(--primary);
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.exam-item:hover {
+    transform: scale(1.02);
+    background-color: #fcfcfc;
+}
+
+.chevron {
+    color: #ccc;
+}
+
+/* --- PRACTICE PAGE STYLES --- */
+/* Special body class for practice page to handle scrolling */
+body.practice-mode {
+    overflow: hidden;
+    height: 100vh;
+}
+
+.workspace {
+    display: flex;
+    height: 100%; /* Fills the rest of the body */
+    width: 100%;
+}
+
+.pdf-box {
+    flex: 2;
+    background: #555;
+    height: 100%;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.sheet-box {
+    flex: 1;
+    background: var(--white);
+    padding: 20px;
+    overflow-y: auto; /* Internal scroll */
+    border-left: 2px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.sheet-box h3 {
+    margin-top: 0;
+    color: var(--primary);
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 10px;
+}
+
+.question-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.q-num {
+    width: 30px;
+    font-weight: bold;
+    color: #555;
+}
+
+.bubbles {
+    display: flex;
+    gap: 8px;
+}
+
+.bubble {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+    background: var(--white);
+    transition: 0.2s;
+}
+
+.bubble:hover {
+    border-color: var(--primary);
+}
+.bubble.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+.bubble.correct {
+    background: var(--correct);
+    color: white;
+    border-color: var(--correct);
+}
+.bubble.wrong {
+    background: var(--wrong);
+    color: white;
+    border-color: var(--wrong);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--secondary);
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+}
+.submit-btn:hover {
+    background: #e09200;
+}
+
+.score-box {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    background: #e2e6ea;
+    padding: 15px;
+    border-radius: 8px;
+}

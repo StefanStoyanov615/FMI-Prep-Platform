@@ -1,0 +1,14 @@
+{
+  "university": [
+    {
+      "id": "uni_2025",
+      "year": "2025"
+    }
+  ],
+  "matura": [
+    {
+      "id": "matura_2024",
+      "year": "2024"
+    }
+  ]
+}

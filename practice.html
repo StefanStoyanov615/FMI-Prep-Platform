@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="bg">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Тест</title>
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <!-- Added class for specific styling -->
+    <body class="practice-mode">
+        <div class="workspace">
+            <div class="pdf-box">
+                <iframe id="pdf-frame" src=""></iframe>
+            </div>
+
+            <div class="sheet-box">
+                <h3 id="exam-title">Зареждане...</h3>
+                <div id="questions"></div>
+
+                <button class="submit-btn" onclick="checkAnswers()">Предай теста</button>
+                <div id="score-box" class="score-box"></div>
+            </div>
+        </div>
+
+        <script>
+            let correctKeys = [];
+            let userPicks = {};
+
+            window.onload = async () => {
+                const id = new URLSearchParams(window.location.search).get("id");
+                if (!id) return alert("Грешка: Няма избран изпит!");
+
+                try {
+                    document.getElementById("pdf-frame").src = `data/${id}.pdf`;
+                    const res = await fetch(`data/${id}_ans.json`);
+                    const data = await res.json();
+
+                    document.getElementById("exam-title").innerText = data.title;
+                    correctKeys = data.answers;
+                    renderSheet(correctKeys.length);
+                } catch (e) {
+                    console.log(e);
+                    alert("Грешка при зареждане на данните.");
+                }
+            };
+
+            function renderSheet(count) {
+                const container = document.getElementById("questions");
+                for (let i = 0; i < count; i++) {
+                    const row = document.createElement("div");
+                    row.className = "question-row";
+                    row.innerHTML = `<div class="q-num">${i + 1}.</div>`;
+
+                    const bubbles = document.createElement("div");
+                    bubbles.className = "bubbles";
+
+                    ["A", "B", "C", "D"].forEach((opt) => {
+                        const b = document.createElement("div");
+                        b.className = "bubble";
+                        b.innerText = opt;
+                        b.id = `q${i}_${opt}`;
+                        b.onclick = () => select(i, opt);
+                        bubbles.appendChild(b);
+                    });
+                    row.appendChild(bubbles);
+                    container.appendChild(row);
+                }
+            }
+
+            function select(idx, opt) {
+                userPicks[idx] = opt;
+                ["A", "B", "C", "D"].forEach((o) => document.getElementById(`q${idx}_${o}`).classList.remove("selected"));
+                document.getElementById(`q${idx}_${opt}`).classList.add("selected");
+            }
+
+            function checkAnswers() {
+                let points = 0;
+                correctKeys.forEach((key, i) => {
+                    const user = userPicks[i];
+                    if (user === key) points++;
+                    if (user) document.getElementById(`q${i}_${user}`).classList.add(user === key ? "correct" : "wrong");
+                    document.getElementById(`q${i}_${key}`).classList.add("correct");
+                });
+                const box = document.getElementById("score-box");
+                box.style.display = "block";
+                box.innerText = `Резултат: ${points} / ${correctKeys.length}`;
+
+                // Scroll to bottom of sheet
+                document.querySelector(".sheet-box").scrollTop = document.querySelector(".sheet-box").scrollHeight;
+            }
+        </script>
+    </body>
+</html>
