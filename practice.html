@@ -45,7 +45,6 @@
 
                 <div id="questions"></div>
 
-                <button class="submit-btn" onclick="checkAnswers()">Предай теста</button>
                 <div id="score-box" class="score-box"></div>
             </div>
         </div>
@@ -116,6 +115,7 @@
                 const pdfBox = document.getElementById("pdf-box");
                 const sheetBox = document.getElementById("sheet-box");
                 const submitBtn = document.getElementById("mobile-submit-btn");
+                const toggleBtn = document.getElementById("open-sheet-btn");
 
                 if (isMobile && pdfBox.dataset.loaded === "true") {
                     // Show mobile header and hide sheet by default
@@ -123,11 +123,13 @@
                     sheetBox.classList.remove("mobile-open");
                     pdfBox.style.display = "";
                     submitBtn.style.display = "none";
+                    toggleBtn.textContent = "Покажи бланката";
                 } else if (isMobile && pdfBox.dataset.loaded === "false") {
                     // No PDF, show sheet directly
                     mobileHeader.style.display = "flex";
                     sheetBox.classList.add("mobile-open");
                     submitBtn.style.display = "block";
+                    toggleBtn.textContent = "Назад до PDF";
                 } else {
                     // Desktop view
                     mobileHeader.style.display = "none";
