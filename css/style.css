@@ -605,10 +605,13 @@ iframe {
     font-weight: 600;
     cursor: pointer;
     margin-top: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 1rem;
     border-radius: 8px;
     color: white;
     transition: all 0.3s ease;
+    display: block;
+    visibility: visible;
 }
 
 .submit-btn:hover {
@@ -707,6 +710,7 @@ iframe {
         height: 36px;
         font-size: 1.2rem;
         margin-left: 0.8rem;
+        display: none;
     }
 
     .question-row {
@@ -740,6 +744,9 @@ iframe {
         padding: 0.9rem;
         font-size: 0.95rem;
         margin-top: 1rem;
+        margin-bottom: 0.8rem;
+        display: block;
+        visibility: visible;
     }
 }
 
@@ -779,6 +786,9 @@ iframe {
         padding: 0.9rem 1rem;
         font-size: 0.95rem;
         margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        display: block;
+        visibility: visible;
     }
 }
 
