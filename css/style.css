@@ -264,13 +264,13 @@ body {
 .exam-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.2rem;
+    gap: 1rem;
 }
 
 .exam-card {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     border: none;
-    padding: 2.5rem 2rem;
+    padding: 1.5rem 1rem;
     border-radius: 14px;
     text-decoration: none;
     color: var(--bg-light);
@@ -284,7 +284,7 @@ body {
     position: relative;
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    min-height: 140px;
+    min-height: 100px;
 }
 
 .exam-card::before {
@@ -308,23 +308,16 @@ body {
 }
 
 .exam-year {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--bg-light);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.3rem;
     position: relative;
     z-index: 1;
 }
 
 .exam-arrow {
-    font-size: 1.5rem;
-    color: rgba(255, 255, 255, 0.8);
-    opacity: 0;
-    transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
-    position: relative;
-    z-index: 1;
+    display: none;
 }
 
 .exam-card:hover .exam-arrow {
