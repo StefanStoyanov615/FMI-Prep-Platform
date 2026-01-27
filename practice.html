@@ -19,7 +19,10 @@
 
     <body class="practice-mode">
         <div class="mobile-header" id="mobile-header" style="display: none">
-            <button class="open-sheet-btn" id="open-sheet-btn" onclick="openSheetMobile()">Покажи бланката</button>
+            <button class="open-sheet-btn" id="open-sheet-btn" onclick="openSheetMobile()">Назад до PDF</button>
+            <button class="mobile-submit-btn" id="mobile-submit-btn" onclick="checkAnswers()" style="display: none">
+                Предай теста
+            </button>
         </div>
 
         <div class="workspace">
@@ -88,6 +91,7 @@
                 const sheetBox = document.getElementById("sheet-box");
                 const pdfBox = document.getElementById("pdf-box");
                 const btn = document.getElementById("open-sheet-btn");
+                const submitBtn = document.getElementById("mobile-submit-btn");
 
                 const isShowing = sheetBox.classList.contains("mobile-open");
 
@@ -96,11 +100,13 @@
                     sheetBox.classList.remove("mobile-open");
                     pdfBox.style.display = "";
                     btn.textContent = "Покажи бланката";
+                    submitBtn.style.display = "none";
                 } else {
                     // Show sheet, hide PDF
                     sheetBox.classList.add("mobile-open");
                     pdfBox.style.display = "none";
                     btn.textContent = "Назад до PDF";
+                    submitBtn.style.display = "block";
                 }
             }
 
@@ -109,21 +115,25 @@
                 const mobileHeader = document.getElementById("mobile-header");
                 const pdfBox = document.getElementById("pdf-box");
                 const sheetBox = document.getElementById("sheet-box");
+                const submitBtn = document.getElementById("mobile-submit-btn");
 
                 if (isMobile && pdfBox.dataset.loaded === "true") {
                     // Show mobile header and hide sheet by default
-                    mobileHeader.style.display = "block";
+                    mobileHeader.style.display = "flex";
                     sheetBox.classList.remove("mobile-open");
                     pdfBox.style.display = "";
+                    submitBtn.style.display = "none";
                 } else if (isMobile && pdfBox.dataset.loaded === "false") {
                     // No PDF, show sheet directly
-                    mobileHeader.style.display = "none";
+                    mobileHeader.style.display = "flex";
                     sheetBox.classList.add("mobile-open");
+                    submitBtn.style.display = "block";
                 } else {
                     // Desktop view
                     mobileHeader.style.display = "none";
                     sheetBox.classList.remove("mobile-open");
                     pdfBox.style.display = "";
+                    submitBtn.style.display = "none";
                 }
             }
 

@@ -483,10 +483,10 @@ iframe {
 .mobile-header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     color: var(--bg-light);
-    padding: 0;
+    padding: 0.8rem;
     display: none;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     z-index: 200;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -515,6 +515,33 @@ iframe {
 .open-sheet-btn:active {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(230, 126, 34, 0.25);
+}
+
+.mobile-submit-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: var(--bg-light);
+    border: none;
+    padding: 0.9rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(26, 58, 82, 0.25);
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    margin-left: 0.8rem;
+}
+
+.mobile-submit-btn:hover {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(26, 58, 82, 0.35);
+}
+
+.mobile-submit-btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(26, 58, 82, 0.25);
 }
 
 .sheet-box.mobile-open {
