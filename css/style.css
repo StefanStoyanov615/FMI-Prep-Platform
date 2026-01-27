@@ -287,6 +287,10 @@ body {
     min-height: 100px;
 }
 
+.exam-section-matura .exam-card {
+    background: linear-gradient(135deg, var(--secondary) 0%, #d86a1a 100%);
+}
+
 .exam-card::before {
     content: "";
     position: absolute;
@@ -487,25 +491,28 @@ iframe {
 }
 
 .open-sheet-btn {
-    background: var(--secondary);
+    background: linear-gradient(135deg, var(--secondary), #d86a1a);
     color: var(--bg-light);
     border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 0.9rem 2rem;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.25);
+    letter-spacing: 0.3px;
 }
 
 .open-sheet-btn:hover {
-    background: #d86a1a;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+    background: linear-gradient(135deg, #d86a1a, #c45a0a);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(230, 126, 34, 0.35);
 }
 
 .open-sheet-btn:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(230, 126, 34, 0.25);
 }
 
 .sheet-box.mobile-open {
@@ -718,9 +725,10 @@ iframe {
 
     .bubble {
         flex: 1;
-        width: auto;
+        width: 40px;
         height: 40px;
         font-size: 0.85rem;
+        min-width: 40px;
     }
 
     .submit-btn {
@@ -755,13 +763,16 @@ iframe {
     }
 
     .bubble {
+        width: 36px;
         height: 36px;
+        min-width: 36px;
         font-size: 0.8rem;
     }
 
     .submit-btn {
-        padding: 0.8rem;
-        font-size: 0.9rem;
+        padding: 0.9rem 1rem;
+        font-size: 0.95rem;
+        margin-top: 1.5rem;
     }
 }
 
