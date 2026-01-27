@@ -18,13 +18,27 @@
     </head>
 
     <body class="practice-mode">
+        <div class="mobile-header" id="mobile-header" style="display: none">
+            <button class="open-sheet-btn" id="open-sheet-btn" onclick="openSheetMobile()">Покажи бланката</button>
+        </div>
+
         <div class="workspace">
-            <div class="pdf-box">
+            <div class="pdf-box" id="pdf-box">
                 <iframe id="pdf-frame" src=""></iframe>
             </div>
 
-            <div class="sheet-box">
-                <h3 id="exam-title" style="margin: 0 0 1.5rem 0">Зареждане...</h3>
+            <div class="sheet-box" id="sheet-box">
+                <div class="sheet-header">
+                    <h3 id="exam-title" style="margin: 0">Зареждане...</h3>
+                    <button
+                        class="fullscreen-btn"
+                        id="fullscreen-btn"
+                        onclick="toggleFullscreen()"
+                        title="Покажи бланката на цял екран"
+                    >
+                        <span class="expand-icon">⛶</span>
+                    </button>
+                </div>
 
                 <div id="questions"></div>
 
@@ -36,6 +50,8 @@
         <script>
             let correctKeys = [];
             let userPicks = {};
+            let isFullscreen = false;
+            let isMobile = false;
 
             // Мапинг: Латиница (JSON) -> Кирилица (Екран)
             const labelsMap = {
@@ -45,6 +61,72 @@
                 D: "Г",
             };
 
+            function toggleFullscreen() {
+                isFullscreen = !isFullscreen;
+                const workspace = document.querySelector(".workspace");
+                const pdfBox = document.getElementById("pdf-box");
+                const sheetBox = document.getElementById("sheet-box");
+                const btn = document.getElementById("fullscreen-btn");
+
+                if (isFullscreen) {
+                    workspace.classList.add("fullscreen-mode");
+                    pdfBox.style.display = "none";
+                    sheetBox.classList.add("fullscreen");
+                    btn.classList.add("active");
+                } else {
+                    workspace.classList.remove("fullscreen-mode");
+                    // Only show pdf-box if it has content (wasn't hidden by missing PDF)
+                    if (pdfBox.style.display !== "none" || pdfBox.dataset.loaded === "true") {
+                        pdfBox.style.display = "";
+                    }
+                    sheetBox.classList.remove("fullscreen");
+                    btn.classList.remove("active");
+                }
+            }
+
+            function openSheetMobile() {
+                const sheetBox = document.getElementById("sheet-box");
+                const pdfBox = document.getElementById("pdf-box");
+                const btn = document.getElementById("open-sheet-btn");
+
+                const isShowing = sheetBox.classList.contains("mobile-open");
+
+                if (isShowing) {
+                    // Hide sheet, show PDF
+                    sheetBox.classList.remove("mobile-open");
+                    pdfBox.style.display = "";
+                    btn.textContent = "Покажи бланката";
+                } else {
+                    // Show sheet, hide PDF
+                    sheetBox.classList.add("mobile-open");
+                    pdfBox.style.display = "none";
+                    btn.textContent = "Назад до PDF";
+                }
+            }
+
+            function checkMobileView() {
+                isMobile = window.innerWidth <= 768;
+                const mobileHeader = document.getElementById("mobile-header");
+                const pdfBox = document.getElementById("pdf-box");
+                const sheetBox = document.getElementById("sheet-box");
+
+                if (isMobile && pdfBox.dataset.loaded === "true") {
+                    // Show mobile header and hide sheet by default
+                    mobileHeader.style.display = "block";
+                    sheetBox.classList.remove("mobile-open");
+                    pdfBox.style.display = "";
+                } else if (isMobile && pdfBox.dataset.loaded === "false") {
+                    // No PDF, show sheet directly
+                    mobileHeader.style.display = "none";
+                    sheetBox.classList.add("mobile-open");
+                } else {
+                    // Desktop view
+                    mobileHeader.style.display = "none";
+                    sheetBox.classList.remove("mobile-open");
+                    pdfBox.style.display = "";
+                }
+            }
+
             window.onload = async () => {
                 const id = new URLSearchParams(window.location.search).get("id");
                 if (!id) return alert("Грешка: Няма избран изпит!");
@@ -52,7 +134,7 @@
                 try {
                     // 1. Зареждане на PDF (с handle за missing file)
                     const pdfFrame = document.getElementById("pdf-frame");
-                    const pdfBox = pdfFrame.parentElement;
+                    const pdfBox = document.getElementById("pdf-box");
 
                     // Опит да се зареди PDF, но не го блокираме ако не успее
                     fetch(`data/${id}.pdf`)
@@ -60,13 +142,18 @@
                             if (!response.ok) {
                                 // Скрий PDF box ако няма PDF
                                 pdfBox.style.display = "none";
+                                pdfBox.dataset.loaded = "false";
                             } else {
                                 pdfFrame.src = `data/${id}.pdf`;
+                                pdfBox.dataset.loaded = "true";
                             }
+                            checkMobileView();
                         })
                         .catch(() => {
                             // Скрий PDF box при грешка
                             pdfBox.style.display = "none";
+                            pdfBox.dataset.loaded = "false";
+                            checkMobileView();
                         });
 
                     // 2. Зареждане на Регистъра за заглавие
@@ -174,6 +261,9 @@
                 // Автоматично скролване до резултата
                 document.querySelector(".sheet-box").scrollTop = document.querySelector(".sheet-box").scrollHeight;
             }
+
+            // Handle window resize for responsive behavior
+            window.addEventListener("resize", checkMobileView);
         </script>
     </body>
 </html>
