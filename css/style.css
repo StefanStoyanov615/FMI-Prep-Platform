@@ -481,27 +481,29 @@ iframe {
 }
 
 .mobile-header {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
     color: var(--bg-light);
-    padding: 1rem;
+    padding: 0;
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 200;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .open-sheet-btn {
     background: linear-gradient(135deg, var(--secondary), #d86a1a);
     color: var(--bg-light);
     border: none;
-    padding: 0.9rem 2rem;
-    border-radius: 8px;
-    font-size: 1.05rem;
+    padding: 1rem 2.5rem;
+    border-radius: 10px;
+    font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.25);
-    letter-spacing: 0.3px;
+    box-shadow: 0 6px 16px rgba(230, 126, 34, 0.35);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .open-sheet-btn:hover {
@@ -645,14 +647,15 @@ iframe {
         top: 0;
         left: 0;
         right: 0;
-        height: 60px;
+        height: 70px;
+        padding: 0.8rem;
         z-index: 200;
     }
 
     .workspace {
         flex-direction: column;
-        margin-top: 60px;
-        height: calc(100vh - 60px);
+        margin-top: 70px;
+        height: calc(100vh - 70px);
     }
 
     .pdf-box {
@@ -675,14 +678,14 @@ iframe {
         display: flex !important;
         flex-direction: column;
         position: fixed;
-        top: 60px;
+        top: 70px;
         left: 0;
         right: 0;
         bottom: 0;
         margin: 0;
         border: none;
         width: 100%;
-        height: calc(100vh - 60px);
+        height: calc(100vh - 70px);
         z-index: 150;
         border-radius: 0;
     }
@@ -721,14 +724,16 @@ iframe {
         width: 100%;
         gap: 0.4rem;
         margin-left: 0;
+        display: flex;
+        justify-content: space-around;
     }
 
     .bubble {
-        flex: 1;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         font-size: 0.85rem;
-        min-width: 40px;
+        min-width: 44px;
+        flex: 0 0 44px;
     }
 
     .submit-btn {
@@ -763,9 +768,10 @@ iframe {
     }
 
     .bubble {
-        width: 36px;
-        height: 36px;
-        min-width: 36px;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        flex: 0 0 40px;
         font-size: 0.8rem;
     }
 
