@@ -23,7 +23,7 @@
                     type === "university" ? "Кандидат-студентски изпити" : "Матури по Математика";
 
                 try {
-                    const res = await fetch("data/registry.json");
+                    const res = await fetch("../registry.json");
                     const data = await res.json();
                     const exams = data[type] || [];
                     const listDiv = document.getElementById("list");

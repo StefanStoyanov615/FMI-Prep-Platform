@@ -3,34 +3,106 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>FMI Prep - Начало</title>
+        <title>FMI Prep Platform</title>
         <!-- Linked Global CSS -->
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
-        <nav>FMI Prep Platform</nav>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-brand">FMI Prep Platform</div>
+            </div>
+        </nav>
 
         <header class="hero">
-            <h1>Платформа за подготовка за ФМИ</h1>
-            <h1>Избери тип изпит</h1>
+            <div class="hero-content">
+                <h1>Подготовка за ФМИ</h1>
+                <p class="hero-subtitle">Решавай тестове от всички години в едно място</p>
+            </div>
         </header>
 
-        <div class="home-container">
-            <!-- University Card -->
-            <div class="card card-uni" onclick="window.location.href = 'exam_list.html?type=university'">
-                <div class="icon">🎓</div>
-                <h2>Кандидат-студентски</h2>
-                <p>Писмени конкурсни изпити по Математика за ФМИ</p>
-                <span class="btn">Виж тестове</span>
-            </div>
+        <main class="main-container">
+            <!-- University Exams Section -->
+            <section class="exam-section exam-section-uni">
+                <div class="section-header">
+                    <span class="section-icon">🎓</span>
+                    <div class="section-title-group">
+                        <h2>Кандидат-студентски изпити</h2>
+                        <p class="section-desc">Входни испити за факултет</p>
+                    </div>
+                </div>
+                <div class="exam-grid" id="university-exams"></div>
+            </section>
 
-            <!-- Matura Card -->
-            <div class="card card-matura" onclick="window.location.href = 'exam_list.html?type=matura'">
-                <div class="icon">📝</div>
-                <h2>Матура (ДЗИ)</h2>
-                <p>Държавни зрелостни изпити по Математика за Профилирана Подготовка</p>
-                <span class="btn">Виж тестове</span>
+            <!-- Matura Exams Section -->
+            <section class="exam-section exam-section-matura">
+                <div class="section-header">
+                    <span class="section-icon">📝</span>
+                    <div class="section-title-group">
+                        <h2>Държавни зрелостни изпити</h2>
+                        <p class="section-desc">Задачи от държавната матура</p>
+                    </div>
+                </div>
+                <div class="exam-grid" id="matura-exams"></div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 FMI Prep Platform. Разработено за подготовка на кандидати.</p>
             </div>
-        </div>
+        </footer>
+
+        <script>
+            window.onload = async () => {
+                try {
+                    const res = await fetch("registry.json");
+                    const data = await res.json();
+
+                    // Load University Exams
+                    const universityExams = data.university || [];
+                    const uniContainer = document.getElementById("university-exams");
+                    if (universityExams.length === 0) {
+                        uniContainer.innerHTML = "<p style='text-align:center; grid-column: 1/-1'>Няма налични тестове</p>";
+                    } else {
+                        universityExams.forEach((exam) => {
+                            const card = document.createElement("a");
+                            card.className = "exam-card";
+                            card.href = `practice.html?id=${exam.id}`;
+                            card.innerHTML = `
+                                <div class="exam-year">${exam.year}</div>
+                                <div class="exam-arrow">➜</div>
+                            `;
+                            uniContainer.appendChild(card);
+                        });
+                    }
+
+                    // Load Matura Exams
+                    const maturaExams = data.matura || [];
+                    const maturaContainer = document.getElementById("matura-exams");
+                    if (maturaExams.length === 0) {
+                        maturaContainer.innerHTML =
+                            "<p style='text-align:center; grid-column: 1/-1'>Няма налични тестове</p>";
+                    } else {
+                        maturaExams.forEach((exam) => {
+                            const card = document.createElement("a");
+                            card.className = "exam-card";
+                            card.href = `practice.html?id=${exam.id}`;
+                            card.innerHTML = `
+                                <div class="exam-year">${exam.year}</div>
+                                <div class="exam-arrow">➜</div>
+                            `;
+                            maturaContainer.appendChild(card);
+                        });
+                    }
+                } catch (e) {
+                    console.error("Error loading exams:", e);
+                    document.getElementById("university-exams").innerHTML =
+                        "<p style='text-align:center'>Грешка при зареждане</p>";
+                    document.getElementById("matura-exams").innerHTML =
+                        "<p style='text-align:center'>Грешка при зареждане</p>";
+                }
+            };
+        </script>
     </body>
 </html>
