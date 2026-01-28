@@ -409,7 +409,7 @@ iframe {
 .sheet-box {
     flex: 1;
     background: var(--bg-light);
-    padding: 1.5rem;
+    padding: 2.5rem;
     overflow-y: auto;
     border-left: 1px solid var(--border-color);
     display: flex;
