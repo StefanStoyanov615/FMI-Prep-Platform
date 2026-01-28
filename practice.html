@@ -21,7 +21,7 @@
         <div class="mobile-header" id="mobile-header" style="display: none">
             <button class="open-sheet-btn" id="open-sheet-btn" onclick="openSheetMobile()">Назад до PDF</button>
             <button class="mobile-submit-btn" id="mobile-submit-btn" onclick="checkAnswers()" style="display: none">
-                Предай теста
+                Покажи отговори
             </button>
         </div>
 
@@ -44,6 +44,10 @@
                 </div>
 
                 <div id="questions"></div>
+
+                <button class="submit-btn" id="submit-btn" onclick="checkAnswers()" style="display: block">
+                    Покажи отговори
+                </button>
 
                 <div id="score-box" class="score-box"></div>
             </div>
@@ -244,34 +248,61 @@
                 document.getElementById(`q${idx}_${key}`).classList.add("selected");
             }
 
+            let resultsShown = false;
+
             function checkAnswers() {
-                let points = 0;
-
-                correctKeys.forEach((correctKey, i) => {
-                    const userKey = userPicks[i];
-
-                    // Проверка
-                    if (userKey === correctKey) {
-                        points++;
-                    }
-
-                    // Оцветяване (Ако потребителят е дал отговор)
-                    if (userKey) {
-                        const isCorrect = userKey === correctKey;
-                        document.getElementById(`q${i}_${userKey}`).classList.add(isCorrect ? "correct" : "wrong");
-                    }
-
-                    // Винаги показваме верния отговор в зелено
-                    document.getElementById(`q${i}_${correctKey}`).classList.add("correct");
-                });
-
-                // Показване на кутията с резултата (беше скрита досега)
                 const box = document.getElementById("score-box");
-                box.style.display = "block";
-                box.innerHTML = `Резултат: <span style="font-size:1.5em">${points}</span> / ${correctKeys.length}`;
+                const submitBtn = document.getElementById("submit-btn");
+                const mobileSubmitBtn = document.getElementById("mobile-submit-btn");
 
-                // Автоматично скролване до резултата
-                document.querySelector(".sheet-box").scrollTop = document.querySelector(".sheet-box").scrollHeight;
+                // Toggle results visibility
+                if (resultsShown) {
+                    // Hide results
+                    box.style.display = "none";
+
+                    // Remove correct/wrong classes from bubbles
+                    correctKeys.forEach((correctKey, i) => {
+                        ["A", "B", "C", "D"].forEach((k) => {
+                            document.getElementById(`q${i}_${k}`).classList.remove("correct", "wrong");
+                        });
+                    });
+
+                    resultsShown = false;
+                    submitBtn.textContent = "Покажи отговори";
+                    mobileSubmitBtn.textContent = "Покажи отговори";
+                } else {
+                    // Show results
+                    let points = 0;
+
+                    correctKeys.forEach((correctKey, i) => {
+                        const userKey = userPicks[i];
+
+                        // Проверка
+                        if (userKey === correctKey) {
+                            points++;
+                        }
+
+                        // Оцветяване (Ако потребителят е дал отговор)
+                        if (userKey) {
+                            const isCorrect = userKey === correctKey;
+                            document.getElementById(`q${i}_${userKey}`).classList.add(isCorrect ? "correct" : "wrong");
+                        }
+
+                        // Винаги показваме верния отговор в зелено
+                        document.getElementById(`q${i}_${correctKey}`).classList.add("correct");
+                    });
+
+                    // Показване на кутията с резултата (беше скрита досега)
+                    box.style.display = "block";
+                    box.innerHTML = `Резултат: <span style="font-size:1.5em">${points}</span> / ${correctKeys.length}`;
+
+                    // Автоматично скролване до резултата
+                    document.querySelector(".sheet-box").scrollTop = document.querySelector(".sheet-box").scrollHeight;
+
+                    resultsShown = true;
+                    submitBtn.textContent = "Скрий отговори";
+                    mobileSubmitBtn.textContent = "Скрий отговори";
+                }
             }
 
             // Handle window resize for responsive behavior

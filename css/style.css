@@ -394,7 +394,7 @@ body.practice-mode {
 }
 
 .pdf-box {
-    flex: 2;
+    flex: 3;
     background: #3a3a3a;
     height: 100%;
     overflow: hidden;
@@ -407,9 +407,9 @@ iframe {
 }
 
 .sheet-box {
-    flex: 1;
+    flex: 0 0 500px;
     background: var(--bg-light);
-    padding: 2.5rem;
+    padding: 1.5rem;
     overflow-y: auto;
     border-left: 1px solid var(--border-color);
     display: flex;
@@ -654,7 +654,6 @@ iframe {
     display: none;
     text-align: center;
     margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
     font-weight: 600;
     font-size: 1.1rem;
     background: linear-gradient(135deg, #f0f5fa, #ffffff);
@@ -717,9 +716,13 @@ iframe {
         border: none;
         width: 100%;
         height: calc(100vh - 70px);
-        overflow-y: auto;
         z-index: 150;
         border-radius: 0;
+        padding-bottom: 8rem;
+    }
+
+    .submit-btn {
+        display: none !important;
     }
 
     .sheet-box h3 {
