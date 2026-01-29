@@ -7,49 +7,52 @@
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body class="practice-mode">
+        <!-- NEW HEADER STRUCTURE -->
         <header class="practice-header">
-            <div style="display: flex; align-items: center">
-                <a href="index.html" class="back-link">❮</a>
-                <span id="exam-title" style="font-weight: 600">Зареждане...</span>
+            <div class="header-left">
+                <a href="index.html" class="back-link" title="Назад">❮</a>
+                <span id="exam-title" class="exam-title">Зареждане...</span>
+            </div>
+
+            <div class="header-right">
+                <!-- 1. Open File Button (Moved to Top) -->
+                <a id="btn-open-pdf" href="#" target="_blank" class="btn btn-ghost" title="Свали PDF">
+                    <span>Отвори Файл</span> <span style="display: none">Файл</span>
+                    <!-- Icon only on mobile -->
+                </a>
+
+                <!-- 2. Sheet Toggle Button (Moved to Top) -->
+                <button id="btn-toggle-sheet" class="btn btn-ghost" onclick="toggleSheet()">Бланка</button>
             </div>
         </header>
 
         <div class="workspace">
-            <!-- UPDATED PDF AREA -->
+            <!-- PDF AREA (Takes 100% space) -->
             <div id="pdf-view" class="pdf-pane">
-                <!-- New Toolbar -->
-                <div class="pdf-toolbar">
-                    <a id="external-pdf-btn" href="#" target="_blank" class="pdf-btn-external">
-                        <span>⤓</span> Отвори файл
-                    </a>
-                </div>
-
-                <iframe id="pdf-frame" class="pdf-frame" src=""></iframe>
-
-                <!-- Fallback message if iframe fails completely -->
-                <div id="pdf-error" class="pdf-error" style="display: none; padding: 2rem; text-align: center">
-                    <p>Файлът не може да се визуализира.</p>
-                    <a
-                        id="error-link"
-                        href="#"
-                        class="btn btn-primary"
-                        style="display: inline-block; width: auto; margin-top: 1rem"
-                        >Изтегли PDF</a
-                    >
+                <iframe id="pdf-frame" class="pdf-pane" src=""></iframe>
+                <!-- Error message if iframe fails -->
+                <div id="pdf-error" class="pdf-error" style="display: none">
+                    <p>Визуализацията не е налична.</p>
+                    <a id="error-link" href="#" style="color: white; text-decoration: underline">Свали файла от тук</a>
                 </div>
             </div>
 
-            <div id="sheet-view" class="sheet-pane hidden">
-                <div id="questions-container"></div>
-                <button class="btn btn-primary" id="submit-btn" onclick="checkAnswers()">Провери</button>
-                <div id="score-box" class="score-box"></div>
-                <div style="height: 60px"></div>
-            </div>
-        </div>
+            <!-- SHEET DRAWER (Hidden off-screen) -->
+            <div id="sheet-drawer" class="sheet-pane">
+                <div class="sheet-content">
+                    <h3 style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem">
+                        Лист за отговори
+                    </h3>
+                    <div id="questions-container"></div>
+                    <div id="score-box" class="score-box"></div>
+                </div>
 
-        <div class="mobile-tabs">
-            <button class="tab-btn active" onclick="switchTab('pdf')">Условие (PDF)</button>
-            <button class="tab-btn" onclick="switchTab('sheet')">Бланка</button>
+                <div class="sheet-footer">
+                    <button class="btn btn-primary" style="width: 100%" id="submit-btn" onclick="checkAnswers()">
+                        Провери отговорите
+                    </button>
+                </div>
+            </div>
         </div>
 
         <script>
@@ -58,68 +61,69 @@
             let correctAnswers = [];
             let userAnswers = {};
 
+            // --- 1. Load Data ---
             window.onload = async () => {
-                if (!examId) return alert("Няма избран тест!");
+                if (!examId) return alert("Грешка: Няма избран изпит!");
 
                 try {
-                    // 1. Registry
+                    // Fetch Title
                     const regRes = await fetch("registry.json");
                     const regData = await regRes.json();
                     const exam = [...(regData.university || []), ...(regData.matura || [])].find((e) => e.id === examId);
-                    document.getElementById("exam-title").textContent = exam ? exam.title : examId;
+                    document.getElementById("exam-title").innerText = exam ? exam.title : "Тест";
 
+                    // Setup PDF Link and Iframe
                     const pdfUrl = `data/${examId}.pdf`;
+                    document.getElementById("btn-open-pdf").href = pdfUrl;
+                    document.getElementById("error-link").href = pdfUrl;
 
-                    // 2. Load PDF & Update Links
-                    const pdfFrame = document.getElementById("pdf-frame");
-                    const externalBtn = document.getElementById("external-pdf-btn");
-                    const errorLink = document.getElementById("error-link");
-
-                    // Set the links for the buttons
-                    externalBtn.href = pdfUrl;
-                    errorLink.href = pdfUrl;
-
-                    // Check if file exists
+                    // Check PDF existence
                     const pdfRes = await fetch(pdfUrl, { method: "HEAD" });
                     if (pdfRes.ok) {
-                        pdfFrame.src = `${pdfUrl}#view=FitH`;
+                        document.getElementById("pdf-frame").src = `${pdfUrl}#view=FitH`;
                     } else {
-                        pdfFrame.style.display = "none";
+                        document.getElementById("pdf-frame").style.display = "none";
                         document.getElementById("pdf-error").style.display = "block";
-                        externalBtn.style.display = "none"; // Hide top button if file is missing
                     }
 
-                    // 3. Load Answers
+                    // Load Questions
                     const ansRes = await fetch(`data/${examId}_ans.json`);
                     const ansData = await ansRes.json();
                     correctAnswers = ansData.answers;
                     renderSheet(correctAnswers.length);
-                } catch (error) {
-                    console.error(error);
-                    alert("Грешка при зареждане.");
+                } catch (e) {
+                    console.error(e);
+                    alert("Грешка при зареждане на данните.");
                 }
             };
 
+            // --- 2. Render Questions ---
             function renderSheet(count) {
                 const container = document.getElementById("questions-container");
                 const labels = { A: "А", B: "Б", C: "В", D: "Г" };
                 container.innerHTML = "";
+
                 for (let i = 0; i < count; i++) {
                     const row = document.createElement("div");
                     row.className = "question-row";
+
                     let bubblesHtml = "";
                     ["A", "B", "C", "D"].forEach((key) => {
-                        bubblesHtml += `<div class="bubble" id="q${i}_${key}" onclick="selectAnswer(${i}, '${key}')">${labels[key]}</div>`;
+                        bubblesHtml += `
+                        <div class="bubble" id="q${i}_${key}" onclick="selectAnswer(${i}, '${key}')">
+                            ${labels[key]}
+                        </div>`;
                     });
+
                     row.innerHTML = `<div class="q-num">${i + 1}.</div><div class="bubbles">${bubblesHtml}</div>`;
                     container.appendChild(row);
                 }
             }
 
+            // --- 3. Interaction Logic ---
             function selectAnswer(qIndex, key) {
                 ["A", "B", "C", "D"].forEach((k) => {
-                    const b = document.getElementById(`q${qIndex}_${k}`);
-                    if (b) b.classList.remove("selected");
+                    document.getElementById(`q${qIndex}_${k}`).classList.remove("selected");
                 });
                 userAnswers[qIndex] = key;
                 document.getElementById(`q${qIndex}_${key}`).classList.add("selected");
@@ -128,46 +132,50 @@
             let isChecked = false;
             function checkAnswers() {
                 if (isChecked) {
-                    if (confirm("Искате ли да изчистите резултатите?")) location.reload();
+                    if (confirm("Рестартиране на теста?")) location.reload();
                     return;
                 }
+
                 let score = 0;
-                const btn = document.getElementById("submit-btn");
                 correctAnswers.forEach((correctKey, i) => {
                     const userKey = userAnswers[i];
                     document.getElementById(`q${i}_${correctKey}`).classList.add("correct");
+
                     if (userKey) {
                         if (userKey === correctKey) score++;
                         else document.getElementById(`q${i}_${userKey}`).classList.add("wrong");
                     }
                 });
+
                 const scoreBox = document.getElementById("score-box");
                 scoreBox.style.display = "block";
-                scoreBox.innerHTML = `Резултат: ${score} / ${correctAnswers.length}`;
-                btn.textContent = "Рестарт";
+                scoreBox.innerHTML = `Резултат: ${score} от ${correctAnswers.length}`;
+
+                // Scroll to score
+                document.querySelector(".sheet-content").scrollTop = document.querySelector(".sheet-content").scrollHeight;
+
+                const btn = document.getElementById("submit-btn");
+                btn.innerText = "Рестарт";
                 btn.style.background = "#7f8c8d";
                 isChecked = true;
-                document.getElementById("sheet-view").scrollTop = document.getElementById("sheet-view").scrollHeight;
             }
 
-            function switchTab(tab) {
-                const pdfView = document.getElementById("pdf-view");
-                const sheetView = document.getElementById("sheet-view");
-                const btns = document.querySelectorAll(".tab-btn");
-                if (tab === "pdf") {
-                    pdfView.classList.remove("hidden");
-                    sheetView.classList.add("hidden");
-                    btns[0].classList.add("active");
-                    btns[1].classList.remove("active");
+            // --- 4. Drawer Toggle Logic ---
+            function toggleSheet() {
+                const drawer = document.getElementById("sheet-drawer");
+                const btn = document.getElementById("btn-toggle-sheet");
+
+                // Toggle class 'open' on the drawer
+                drawer.classList.toggle("open");
+                btn.classList.toggle("active");
+
+                // Optional: Change button text
+                if (drawer.classList.contains("open")) {
+                    // btn.innerText = "Затвори"; // Optional text change
                 } else {
-                    pdfView.classList.add("hidden");
-                    sheetView.classList.remove("hidden");
-                    btns[0].classList.remove("active");
-                    btns[1].classList.add("active");
+                    // btn.innerText = "Бланка";
                 }
             }
-
-            if (window.innerWidth <= 768) switchTab("pdf");
         </script>
     </body>
 </html>

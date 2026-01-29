@@ -2,23 +2,17 @@
    1. VARIABLES & RESET
    ========================================= */
 :root {
-    /* Color Palette */
-    --primary: #1a3a52; /* Deep Blue */
+    --primary: #1a3a52;
     --primary-light: #2d5a80;
-    --secondary: #e67e22; /* Orange */
-    --bg-body: #f4f7f6; /* Light Gray Background */
+    --secondary: #e67e22;
+    --bg-body: #f4f7f6;
     --bg-white: #ffffff;
     --text-main: #2c3e50;
     --text-muted: #7f8c8d;
     --border: #e0e0e0;
-
-    /* State Colors */
-    --success: #27ae60; /* Green */
-    --error: #e74c3c; /* Red */
-
-    /* Dimensions & Spacing */
+    --success: #27ae60;
+    --error: #e74c3c;
     --header-height: 60px;
-    --mobile-tab-height: 60px;
     --radius: 8px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -30,7 +24,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--bg-body);
     color: var(--text-main);
     line-height: 1.6;
@@ -45,32 +39,47 @@ a {
    2. GLOBAL COMPONENTS
    ========================================= */
 .btn {
-    padding: 0.8rem 1.5rem;
+    padding: 0.6rem 1.2rem;
     border: none;
-    border-radius: var(--radius);
+    border-radius: 4px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 1rem;
-    transition:
-        transform 0.2s,
-        opacity 0.2s;
-    display: inline-block;
-    text-align: center;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
+/* Primary Action Button (Orange) */
 .btn-primary {
     background: var(--secondary);
     color: white;
-    width: 100%;
+}
+.btn-primary:hover {
+    background: #d35400;
 }
 
-.btn:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+/* Ghost/Outline Button (for Header) */
+.btn-ghost {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Toggle Button Active State */
+.btn-ghost.active {
+    background: white;
+    color: var(--primary);
+    border-color: white;
 }
 
 /* =========================================
-   3. NAVBAR & LANDING PAGE (Index)
+   3. LANDING PAGE STYLES (Index)
    ========================================= */
 .navbar {
     background: var(--primary);
@@ -79,161 +88,122 @@ a {
     display: flex;
     align-items: center;
     padding: 0 1.5rem;
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
-
 .navbar-brand {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: bold;
-    letter-spacing: 0.5px;
 }
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem 1rem;
 }
-
 .hero {
     text-align: center;
-    margin-bottom: 3rem;
-    padding: 3rem 1rem;
-    background: var(--bg-white);
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: white;
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
     border-top: 5px solid var(--primary);
+    box-shadow: var(--shadow);
 }
-
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary);
-}
-
-.section-title {
-    border-left: 5px solid var(--secondary);
-    padding-left: 1rem;
-    margin: 2rem 0 1.5rem 0;
-    color: var(--primary);
-    font-size: 1.5rem;
-}
-
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 1rem;
-    margin-bottom: 3rem;
 }
-
 .card {
-    background: var(--bg-white);
-    border-radius: var(--radius);
+    background: white;
     padding: 1.5rem;
+    border-radius: var(--radius);
     text-align: center;
     color: var(--primary);
     box-shadow: var(--shadow);
-    transition:
-        transform 0.2s,
-        border-color 0.2s;
-    border: 1px solid transparent;
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: 120px;
+    border: 1px solid transparent;
+    transition: transform 0.2s;
 }
-
 .card:hover {
     transform: translateY(-5px);
     border-color: var(--secondary);
 }
-
 .card-year {
     font-size: 1.8rem;
     font-weight: bold;
-    margin-bottom: 0.2rem;
+}
+.section-title {
+    color: var(--primary);
+    margin: 2rem 0 1rem;
+    border-left: 4px solid var(--secondary);
+    padding-left: 10px;
 }
 
 /* =========================================
-   4. PRACTICE MODE LAYOUT
+   4. PRACTICE MODE LAYOUT (Redesigned)
    ========================================= */
 body.practice-mode {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Prevent scrolling on the body */
+    overflow: hidden;
 }
 
+/* HEADER */
 .practice-header {
     background: var(--primary);
     color: white;
     height: var(--header-height);
     display: flex;
     align-items: center;
-    padding: 0 1rem;
     justify-content: space-between;
+    padding: 0 1rem;
     flex-shrink: 0;
-    box-shadow: var(--shadow);
-    z-index: 20;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+}
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
 }
 
 .back-link {
-    color: white;
-    margin-right: 1rem;
     font-size: 1.5rem;
+    color: white;
     line-height: 1;
-    cursor: pointer;
 }
-
-.workspace {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-}
-
-/* --- Left: PDF Pane --- */
-.pdf-pane {
-    flex: 1; /* Takes remaining space */
-    background: #525659; /* Standard PDF viewer gray */
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-/* New Toolbar for PDF fallback */
-.pdf-toolbar {
-    background: #f1f1f1;
-    border-bottom: 1px solid #ccc;
-    padding: 0 1rem;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-shrink: 0;
-}
-
-.pdf-btn-external {
-    font-size: 0.9rem;
-    color: var(--primary);
+.exam-title {
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
-    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.pdf-btn-external:hover {
-    background: #e0e0e0;
-}
-
-.pdf-frame {
+/* WORKSPACE */
+.workspace {
+    position: relative;
+    flex: 1;
     width: 100%;
-    flex: 1; /* Takes remaining height below toolbar */
+    height: 100%;
+    overflow: hidden;
+    background: #525659;
+}
+
+/* PDF VIEWER (Always Full Screen) */
+.pdf-pane {
+    width: 100%;
+    height: 100%;
     border: none;
     display: block;
 }
@@ -242,80 +212,89 @@ body.practice-mode {
     color: white;
     text-align: center;
     padding-top: 5rem;
+    position: absolute;
+    width: 100%;
 }
 
-/* --- Right: Sheet Pane --- */
+/* SHEET DRAWER (Hidden by default) */
 .sheet-pane {
-    width: 400px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 400px; /* Desktop width */
     background: var(--bg-white);
-    border-left: 1px solid var(--border);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%); /* Hidden off-screen right */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 50;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow-y: auto;
-    padding: 1.5rem;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
+    border-left: 1px solid var(--border);
 }
 
-/* =========================================
-   5. EXAM SHEET COMPONENTS
-   ========================================= */
+.sheet-pane.open {
+    transform: translateX(0); /* Slide in */
+}
+
+.sheet-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+}
+
+.sheet-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border);
+    background: #f9f9f9;
+}
+
+/* BUBBLES */
 .question-row {
     display: flex;
     align-items: center;
     padding: 0.8rem 0;
     border-bottom: 1px solid #f0f0f0;
 }
-
 .q-num {
     width: 35px;
     font-weight: bold;
     color: var(--text-muted);
-    font-size: 1rem;
 }
-
 .bubbles {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex: 1;
-    justify-content: flex-start;
+    justify-content: space-around;
 }
-
 .bubble {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: 2px solid var(--border);
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 0.95rem;
     font-weight: 600;
-    color: var(--text-muted);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.9rem;
     background: white;
 }
-
 .bubble:hover {
     border-color: var(--primary);
     color: var(--primary);
-    transform: scale(1.1);
 }
-
 .bubble.selected {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
-    box-shadow: 0 2px 5px rgba(26, 58, 82, 0.3);
 }
-
 .bubble.correct {
     background: var(--success);
     color: white;
     border-color: var(--success);
 }
-
 .bubble.wrong {
     background: var(--error);
     color: white;
@@ -323,101 +302,35 @@ body.practice-mode {
 }
 
 .score-box {
-    margin-top: 1.5rem;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border: 2px solid var(--primary);
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f0f9ff;
+    border: 1px solid var(--primary);
     border-radius: var(--radius);
     text-align: center;
-    font-size: 1.2rem;
     font-weight: bold;
     color: var(--primary);
-    display: none; /* Hidden by default */
-}
-
-/* Spacer to prevent content from hiding behind mobile tabs */
-.mobile-spacer {
     display: none;
-    height: 80px;
 }
 
 /* =========================================
-   6. RESPONSIVE (MOBILE)
+   5. RESPONSIVE
    ========================================= */
-.mobile-tabs {
-    display: none; /* Hidden on Desktop */
-}
-
 @media (max-width: 768px) {
-    /* 1. Adjust Grid */
-    .grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .hero h1 {
-        font-size: 2rem;
-    }
-
-    /* 2. Practice Mode: Stack Panes */
-    .workspace {
-        flex-direction: column;
-    }
-
-    /* 3. Toggle Logic classes (Only apply on mobile) */
-    .pdf-pane.hidden,
-    .sheet-pane.hidden {
-        display: none !important;
-    }
+    .exam-title {
+        display: none;
+    } /* Hide Title on mobile to save space for buttons */
 
     .sheet-pane {
-        width: 100%;
-        border-left: none;
-        flex: 1;
+        width: 100%; /* Sheet covers full screen on mobile */
     }
 
-    .mobile-spacer {
-        display: block; /* Activate spacer so submit button isn't covered */
+    .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
     }
 
-    /* 4. Bottom Tab Bar */
-    .mobile-tabs {
-        display: flex;
-        height: var(--mobile-tab-height);
-        background: var(--bg-white);
-        border-top: 1px solid var(--border);
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
-    }
-
-    .tab-btn {
-        flex: 1;
-        background: none;
-        border: none;
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: color 0.2s;
-        border-top: 3px solid transparent;
-    }
-
-    .tab-btn.active {
-        color: var(--secondary);
-        border-top-color: var(--secondary);
-        background: #fffcf9;
-    }
-
-    /* Adjust bubbles for small screens */
-    .bubbles {
-        justify-content: space-between;
-    }
-
-    .bubble {
-        width: 42px; /* Larger tap target */
-        height: 42px;
+    .navbar-brand {
+        font-size: 1.1rem;
     }
 }
