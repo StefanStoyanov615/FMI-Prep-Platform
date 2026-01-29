@@ -2,311 +2,172 @@
 <html lang="bg">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <title>Тест</title>
         <link rel="stylesheet" href="css/style.css" />
-
-        <!-- Added internal styles for the toggle functionality -->
-        <style>
-            /* Basic layout assumption to ensure toggle works */
-            .workspace {
-                display: flex;
-                height: 100vh;
-                overflow: hidden;
-            }
-        </style>
     </head>
-
     <body class="practice-mode">
-        <div class="mobile-header" id="mobile-header" style="display: none">
-            <button class="open-sheet-btn" id="open-sheet-btn" onclick="openSheetMobile()">Назад до PDF</button>
-            <button class="mobile-submit-btn" id="mobile-submit-btn" onclick="checkAnswers()" style="display: none">
-                Покажи отговори
-            </button>
-        </div>
+        <header class="practice-header">
+            <div style="display: flex; align-items: center">
+                <a href="index.html" class="back-link">❮</a>
+                <span id="exam-title" style="font-weight: 600">Зареждане...</span>
+            </div>
+        </header>
 
         <div class="workspace">
-            <div class="pdf-box" id="pdf-box">
-                <iframe id="pdf-frame" src=""></iframe>
-            </div>
-
-            <div class="sheet-box" id="sheet-box">
-                <div class="sheet-header">
-                    <h3 id="exam-title" style="margin: 0">Зареждане...</h3>
-                    <button
-                        class="fullscreen-btn"
-                        id="fullscreen-btn"
-                        onclick="toggleFullscreen()"
-                        title="Покажи бланката на цял екран"
-                    >
-                        <span class="expand-icon">⛶</span>
-                    </button>
+            <!-- UPDATED PDF AREA -->
+            <div id="pdf-view" class="pdf-pane">
+                <!-- New Toolbar -->
+                <div class="pdf-toolbar">
+                    <a id="external-pdf-btn" href="#" target="_blank" class="pdf-btn-external">
+                        <span>⤓</span> Отвори файл
+                    </a>
                 </div>
 
-                <div id="questions"></div>
+                <iframe id="pdf-frame" class="pdf-frame" src=""></iframe>
 
-                <button class="submit-btn" id="submit-btn" onclick="checkAnswers()" style="display: block">
-                    Покажи отговори
-                </button>
-
-                <div id="score-box" class="score-box"></div>
+                <!-- Fallback message if iframe fails completely -->
+                <div id="pdf-error" class="pdf-error" style="display: none; padding: 2rem; text-align: center">
+                    <p>Файлът не може да се визуализира.</p>
+                    <a
+                        id="error-link"
+                        href="#"
+                        class="btn btn-primary"
+                        style="display: inline-block; width: auto; margin-top: 1rem"
+                        >Изтегли PDF</a
+                    >
+                </div>
             </div>
+
+            <div id="sheet-view" class="sheet-pane hidden">
+                <div id="questions-container"></div>
+                <button class="btn btn-primary" id="submit-btn" onclick="checkAnswers()">Провери</button>
+                <div id="score-box" class="score-box"></div>
+                <div style="height: 60px"></div>
+            </div>
+        </div>
+
+        <div class="mobile-tabs">
+            <button class="tab-btn active" onclick="switchTab('pdf')">Условие (PDF)</button>
+            <button class="tab-btn" onclick="switchTab('sheet')">Бланка</button>
         </div>
 
         <script>
-            let correctKeys = [];
-            let userPicks = {};
-            let isFullscreen = false;
-            let isMobile = false;
-
-            // Мапинг: Латиница (JSON) -> Кирилица (Екран)
-            const labelsMap = {
-                A: "А",
-                B: "Б",
-                C: "В",
-                D: "Г",
-            };
-
-            function toggleFullscreen() {
-                isFullscreen = !isFullscreen;
-                const workspace = document.querySelector(".workspace");
-                const pdfBox = document.getElementById("pdf-box");
-                const sheetBox = document.getElementById("sheet-box");
-                const btn = document.getElementById("fullscreen-btn");
-
-                if (isFullscreen) {
-                    workspace.classList.add("fullscreen-mode");
-                    pdfBox.style.display = "none";
-                    sheetBox.classList.add("fullscreen");
-                    btn.classList.add("active");
-                } else {
-                    workspace.classList.remove("fullscreen-mode");
-                    // Only show pdf-box if it has content (wasn't hidden by missing PDF)
-                    if (pdfBox.style.display !== "none" || pdfBox.dataset.loaded === "true") {
-                        pdfBox.style.display = "";
-                    }
-                    sheetBox.classList.remove("fullscreen");
-                    btn.classList.remove("active");
-                }
-            }
-
-            function openSheetMobile() {
-                const sheetBox = document.getElementById("sheet-box");
-                const pdfBox = document.getElementById("pdf-box");
-                const btn = document.getElementById("open-sheet-btn");
-                const submitBtn = document.getElementById("mobile-submit-btn");
-
-                const isShowing = sheetBox.classList.contains("mobile-open");
-
-                if (isShowing) {
-                    // Hide sheet, show PDF
-                    sheetBox.classList.remove("mobile-open");
-                    pdfBox.style.display = "";
-                    btn.textContent = "Покажи бланката";
-                    submitBtn.style.display = "none";
-                } else {
-                    // Show sheet, hide PDF
-                    sheetBox.classList.add("mobile-open");
-                    pdfBox.style.display = "none";
-                    btn.textContent = "Назад до PDF";
-                    submitBtn.style.display = "block";
-                }
-            }
-
-            function checkMobileView() {
-                isMobile = window.innerWidth <= 768;
-                const mobileHeader = document.getElementById("mobile-header");
-                const pdfBox = document.getElementById("pdf-box");
-                const sheetBox = document.getElementById("sheet-box");
-                const submitBtn = document.getElementById("mobile-submit-btn");
-                const toggleBtn = document.getElementById("open-sheet-btn");
-
-                if (isMobile && pdfBox.dataset.loaded === "true") {
-                    // Show mobile header and hide sheet by default
-                    mobileHeader.style.display = "flex";
-                    sheetBox.classList.remove("mobile-open");
-                    pdfBox.style.display = "";
-                    submitBtn.style.display = "none";
-                    toggleBtn.textContent = "Покажи бланката";
-                } else if (isMobile && pdfBox.dataset.loaded === "false") {
-                    // No PDF, show sheet directly
-                    mobileHeader.style.display = "flex";
-                    sheetBox.classList.add("mobile-open");
-                    submitBtn.style.display = "block";
-                    toggleBtn.textContent = "Назад до PDF";
-                } else {
-                    // Desktop view
-                    mobileHeader.style.display = "none";
-                    sheetBox.classList.remove("mobile-open");
-                    pdfBox.style.display = "";
-                    submitBtn.style.display = "none";
-                }
-            }
+            const urlParams = new URLSearchParams(window.location.search);
+            const examId = urlParams.get("id");
+            let correctAnswers = [];
+            let userAnswers = {};
 
             window.onload = async () => {
-                const id = new URLSearchParams(window.location.search).get("id");
-                if (!id) return alert("Грешка: Няма избран изпит!");
+                if (!examId) return alert("Няма избран тест!");
 
                 try {
-                    // 1. Зареждане на PDF (с handle за missing file)
+                    // 1. Registry
+                    const regRes = await fetch("registry.json");
+                    const regData = await regRes.json();
+                    const exam = [...(regData.university || []), ...(regData.matura || [])].find((e) => e.id === examId);
+                    document.getElementById("exam-title").textContent = exam ? exam.title : examId;
+
+                    const pdfUrl = `data/${examId}.pdf`;
+
+                    // 2. Load PDF & Update Links
                     const pdfFrame = document.getElementById("pdf-frame");
-                    const pdfBox = document.getElementById("pdf-box");
+                    const externalBtn = document.getElementById("external-pdf-btn");
+                    const errorLink = document.getElementById("error-link");
 
-                    // Опит да се зареди PDF, но не го блокираме ако не успее
-                    fetch(`data/${id}.pdf`)
-                        .then((response) => {
-                            if (!response.ok) {
-                                // Скрий PDF box ако няма PDF
-                                pdfBox.style.display = "none";
-                                pdfBox.dataset.loaded = "false";
-                            } else {
-                                pdfFrame.src = `data/${id}.pdf`;
-                                pdfBox.dataset.loaded = "true";
-                            }
-                            checkMobileView();
-                        })
-                        .catch(() => {
-                            // Скрий PDF box при грешка
-                            pdfBox.style.display = "none";
-                            pdfBox.dataset.loaded = "false";
-                            checkMobileView();
-                        });
+                    // Set the links for the buttons
+                    externalBtn.href = pdfUrl;
+                    errorLink.href = pdfUrl;
 
-                    // 2. Зареждане на Регистъра за заглавие
-                    const registryRes = await fetch("registry.json");
-                    const registryData = await registryRes.json();
-                    let examTitle = "Неизвестен тест";
+                    // Check if file exists
+                    const pdfRes = await fetch(pdfUrl, { method: "HEAD" });
+                    if (pdfRes.ok) {
+                        pdfFrame.src = `${pdfUrl}#view=FitH`;
+                    } else {
+                        pdfFrame.style.display = "none";
+                        document.getElementById("pdf-error").style.display = "block";
+                        externalBtn.style.display = "none"; // Hide top button if file is missing
+                    }
 
-                    // Търси в университетските изпити
-                    const uniExam = registryData.university.find((e) => e.id === id);
-                    if (uniExam) examTitle = uniExam.title;
-
-                    // Търси в матурите
-                    const maturaExam = registryData.matura.find((e) => e.id === id);
-                    if (maturaExam) examTitle = maturaExam.title;
-
-                    // 3. Зареждане на Отговорите
-                    const res = await fetch(`data/${id}_ans.json`);
-                    const data = await res.json();
-
-                    document.getElementById("exam-title").innerText = examTitle;
-                    correctKeys = data.answers;
-
-                    // Генериране на бланката
-                    renderSheet(correctKeys.length);
-                } catch (e) {
-                    console.log(e);
-                    alert("Грешка при зареждане на данните.");
+                    // 3. Load Answers
+                    const ansRes = await fetch(`data/${examId}_ans.json`);
+                    const ansData = await ansRes.json();
+                    correctAnswers = ansData.answers;
+                    renderSheet(correctAnswers.length);
+                } catch (error) {
+                    console.error(error);
+                    alert("Грешка при зареждане.");
                 }
             };
 
             function renderSheet(count) {
-                const container = document.getElementById("questions");
-                container.innerHTML = ""; // Изчистване при презареждане
-
+                const container = document.getElementById("questions-container");
+                const labels = { A: "А", B: "Б", C: "В", D: "Г" };
+                container.innerHTML = "";
                 for (let i = 0; i < count; i++) {
                     const row = document.createElement("div");
                     row.className = "question-row";
-
-                    // Номер на въпроса
-                    row.innerHTML = `<div class="q-num">${i + 1}.</div>`;
-
-                    const bubbles = document.createElement("div");
-                    bubbles.className = "bubbles";
-
-                    // Тук въртим латинските ключове (за логиката), но показваме кирилица
+                    let bubblesHtml = "";
                     ["A", "B", "C", "D"].forEach((key) => {
-                        const b = document.createElement("div");
-                        b.className = "bubble";
-
-                        // ВАЖНО: Визуално показваме БГ буквата
-                        b.innerText = labelsMap[key];
-
-                        // ID-то остава с латинска буква за CSS и логика
-                        b.id = `q${i}_${key}`;
-
-                        // При клик изпращаме латинския ключ 'key' (A, B...), за да съвпада с JSON-a
-                        b.onclick = () => select(i, key);
-
-                        bubbles.appendChild(b);
+                        bubblesHtml += `<div class="bubble" id="q${i}_${key}" onclick="selectAnswer(${i}, '${key}')">${labels[key]}</div>`;
                     });
-
-                    row.appendChild(bubbles);
+                    row.innerHTML = `<div class="q-num">${i + 1}.</div><div class="bubbles">${bubblesHtml}</div>`;
                     container.appendChild(row);
                 }
             }
 
-            function select(idx, key) {
-                userPicks[idx] = key; // Записваме латинската буква (напр. "B")
-
-                // Махаме класа 'selected' от всички в реда
+            function selectAnswer(qIndex, key) {
                 ["A", "B", "C", "D"].forEach((k) => {
-                    document.getElementById(`q${idx}_${k}`).classList.remove("selected");
+                    const b = document.getElementById(`q${qIndex}_${k}`);
+                    if (b) b.classList.remove("selected");
                 });
-
-                // Слагаме 'selected' на натиснатия
-                document.getElementById(`q${idx}_${key}`).classList.add("selected");
+                userAnswers[qIndex] = key;
+                document.getElementById(`q${qIndex}_${key}`).classList.add("selected");
             }
 
-            let resultsShown = false;
-
+            let isChecked = false;
             function checkAnswers() {
-                const box = document.getElementById("score-box");
-                const submitBtn = document.getElementById("submit-btn");
-                const mobileSubmitBtn = document.getElementById("mobile-submit-btn");
+                if (isChecked) {
+                    if (confirm("Искате ли да изчистите резултатите?")) location.reload();
+                    return;
+                }
+                let score = 0;
+                const btn = document.getElementById("submit-btn");
+                correctAnswers.forEach((correctKey, i) => {
+                    const userKey = userAnswers[i];
+                    document.getElementById(`q${i}_${correctKey}`).classList.add("correct");
+                    if (userKey) {
+                        if (userKey === correctKey) score++;
+                        else document.getElementById(`q${i}_${userKey}`).classList.add("wrong");
+                    }
+                });
+                const scoreBox = document.getElementById("score-box");
+                scoreBox.style.display = "block";
+                scoreBox.innerHTML = `Резултат: ${score} / ${correctAnswers.length}`;
+                btn.textContent = "Рестарт";
+                btn.style.background = "#7f8c8d";
+                isChecked = true;
+                document.getElementById("sheet-view").scrollTop = document.getElementById("sheet-view").scrollHeight;
+            }
 
-                // Toggle results visibility
-                if (resultsShown) {
-                    // Hide results
-                    box.style.display = "none";
-
-                    // Remove correct/wrong classes from bubbles
-                    correctKeys.forEach((correctKey, i) => {
-                        ["A", "B", "C", "D"].forEach((k) => {
-                            document.getElementById(`q${i}_${k}`).classList.remove("correct", "wrong");
-                        });
-                    });
-
-                    resultsShown = false;
-                    submitBtn.textContent = "Покажи отговори";
-                    mobileSubmitBtn.textContent = "Покажи отговори";
+            function switchTab(tab) {
+                const pdfView = document.getElementById("pdf-view");
+                const sheetView = document.getElementById("sheet-view");
+                const btns = document.querySelectorAll(".tab-btn");
+                if (tab === "pdf") {
+                    pdfView.classList.remove("hidden");
+                    sheetView.classList.add("hidden");
+                    btns[0].classList.add("active");
+                    btns[1].classList.remove("active");
                 } else {
-                    // Show results
-                    let points = 0;
-
-                    correctKeys.forEach((correctKey, i) => {
-                        const userKey = userPicks[i];
-
-                        // Проверка
-                        if (userKey === correctKey) {
-                            points++;
-                        }
-
-                        // Оцветяване (Ако потребителят е дал отговор)
-                        if (userKey) {
-                            const isCorrect = userKey === correctKey;
-                            document.getElementById(`q${i}_${userKey}`).classList.add(isCorrect ? "correct" : "wrong");
-                        }
-
-                        // Винаги показваме верния отговор в зелено
-                        document.getElementById(`q${i}_${correctKey}`).classList.add("correct");
-                    });
-
-                    // Показване на кутията с резултата (беше скрита досега)
-                    box.style.display = "block";
-                    box.innerHTML = `Резултат: <span style="font-size:1.5em">${points}</span> / ${correctKeys.length}`;
-
-                    // Автоматично скролване до резултата
-                    document.querySelector(".sheet-box").scrollTop = document.querySelector(".sheet-box").scrollHeight;
-
-                    resultsShown = true;
-                    submitBtn.textContent = "Скрий отговори";
-                    mobileSubmitBtn.textContent = "Скрий отговори";
+                    pdfView.classList.add("hidden");
+                    sheetView.classList.remove("hidden");
+                    btns[0].classList.remove("active");
+                    btns[1].classList.add("active");
                 }
             }
 
-            // Handle window resize for responsive behavior
-            window.addEventListener("resize", checkMobileView);
+            if (window.innerWidth <= 768) switchTab("pdf");
         </script>
     </body>
 </html>

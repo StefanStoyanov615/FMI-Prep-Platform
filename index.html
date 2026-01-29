@@ -4,52 +4,27 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>FMI Prep Platform</title>
-        <!-- Linked Global CSS -->
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
         <nav class="navbar">
-            <div class="navbar-container">
-                <div class="navbar-brand">FMI Prep Platform</div>
-            </div>
+            <a href="#" class="navbar-brand">FMI Prep</a>
         </nav>
 
-        <header class="hero">
-            <div class="hero-content">
+        <div class="container">
+            <header class="hero">
                 <h1>Подготовка за ФМИ</h1>
-                <p class="hero-subtitle">Решавай тестове по математика на едно място</p>
-            </div>
-        </header>
+                <p>Всички тестове и матури на едно място</p>
+            </header>
 
-        <main class="main-container">
-            <!-- University Exams Section -->
-            <section class="exam-section exam-section-uni">
-                <div class="section-header">
-                    <div class="section-title-group">
-                        <h2>Кандидат-студентски изпити</h2>
-                        <p class="section-desc">Входни изпити за ФМИ</p>
-                    </div>
-                </div>
-                <div class="exam-grid" id="university-exams"></div>
-            </section>
+            <!-- University Exams -->
+            <h2 class="section-title">Кандидат-студентски изпити</h2>
+            <div id="uni-grid" class="grid">Loading...</div>
 
-            <!-- Matura Exams Section -->
-            <section class="exam-section exam-section-matura">
-                <div class="section-header">
-                    <div class="section-title-group">
-                        <h2>Държавни зрелостни изпити</h2>
-                        <p class="section-desc">Задачи от държавната матура профилирана подготовка</p>
-                    </div>
-                </div>
-                <div class="exam-grid" id="matura-exams"></div>
-            </section>
-        </main>
-
-        <footer class="footer">
-            <div class="footer-content">
-                <p>&copy; 2025 FMI Prep Platform. Разработено за подготовка на кандидати.</p>
-            </div>
-        </footer>
+            <!-- Matura Exams -->
+            <h2 class="section-title">Държавни зрелостни изпити</h2>
+            <div id="matura-grid" class="grid">Loading...</div>
+        </div>
 
         <script>
             window.onload = async () => {
@@ -57,50 +32,31 @@
                     const res = await fetch("registry.json");
                     const data = await res.json();
 
-                    // Load University Exams
-                    const universityExams = data.university || [];
-                    const uniContainer = document.getElementById("university-exams");
-                    if (universityExams.length === 0) {
-                        uniContainer.innerHTML = "<p style='text-align:center; grid-column: 1/-1'>Няма налични тестове</p>";
-                    } else {
-                        universityExams.forEach((exam) => {
-                            const card = document.createElement("a");
-                            card.className = "exam-card";
-                            card.href = `practice.html?id=${exam.id}`;
-                            card.innerHTML = `
-                                <div class="exam-year">${exam.year}</div>
-                                <div class="exam-arrow">➜</div>
-                            `;
-                            uniContainer.appendChild(card);
-                        });
-                    }
-
-                    // Load Matura Exams
-                    const maturaExams = data.matura || [];
-                    const maturaContainer = document.getElementById("matura-exams");
-                    if (maturaExams.length === 0) {
-                        maturaContainer.innerHTML =
-                            "<p style='text-align:center; grid-column: 1/-1'>Няма налични тестове</p>";
-                    } else {
-                        maturaExams.forEach((exam) => {
-                            const card = document.createElement("a");
-                            card.className = "exam-card";
-                            card.href = `practice.html?id=${exam.id}`;
-                            card.innerHTML = `
-                                <div class="exam-year">${exam.year}</div>
-                                <div class="exam-arrow">➜</div>
-                            `;
-                            maturaContainer.appendChild(card);
-                        });
-                    }
-                } catch (e) {
-                    console.error("Error loading exams:", e);
-                    document.getElementById("university-exams").innerHTML =
-                        "<p style='text-align:center'>Грешка при зареждане</p>";
-                    document.getElementById("matura-exams").innerHTML =
-                        "<p style='text-align:center'>Грешка при зареждане</p>";
+                    renderGrid("uni-grid", data.university);
+                    renderGrid("matura-grid", data.matura);
+                } catch (err) {
+                    console.error(err);
+                    alert("Грешка при зареждане на данните.");
                 }
             };
+
+            function renderGrid(elementId, items) {
+                const container = document.getElementById(elementId);
+                if (!items || items.length === 0) {
+                    container.innerHTML = "<p>Няма налични тестове.</p>";
+                    return;
+                }
+                container.innerHTML = items
+                    .map(
+                        (item) => `
+                <a href="practice.html?id=${item.id}" class="card">
+                    <div class="card-year">${item.year}</div>
+                    <div>${item.title || "Тест"}</div>
+                </a>
+            `,
+                    )
+                    .join("");
+            }
         </script>
     </body>
 </html>
