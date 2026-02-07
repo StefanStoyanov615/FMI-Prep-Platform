@@ -1,36 +1,123 @@
 {
-  "university": [
-    {
-      "id": "uni_2025_2",
-      "year": "2025 Юни",
-      "title": "Кандидат-студентски изпит 2025 Юни"
-    },
-    {
-      "id": "uni_2025_1",
-      "year": "2025 Април",
-      "title": "Кандидат-студентски изпит 2025 Април"
-    },
-    {
-      "id": "uni_2024_2",
-      "year": "2024 Юни",
-      "title": "Кандидат-студентски изпит 2024 Юни"
-    },
-    {
-      "id": "uni_2024_1",
-      "year": "2024 Април",
-      "title": "Кандидат-студентски изпит 2024 Април"
-    }
-  ],
-  "matura": [
-    {
-      "id": "matura_2025",
-      "year": "2025",
-      "title": "Държавен зрелостен изпит 2025"
-    },
-    {
-      "id": "matura_2024",
-      "year": "2024",
-      "title": "Държавен зрелостен изпит 2024"
-    }
-  ]
+    "ksi": [
+        {
+            "year": "2025",
+            "title": "07.06.2025",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/tema_1_07.06.2025.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/tema_1_resheniya_07.06.2025.pdf"
+        },
+        {
+            "year": "2025",
+            "title": "12.04.2025",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/tema_n3_12.04.2025.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/primerni_resheniya_tema_n3_12.04.2025_0.pdf"
+        },
+        {
+            "year": "2024",
+            "title": "08.06.2024",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/ksk_08.06.2024.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/ksk1_solutions_06.08.2024.pdf"
+        },
+        {
+            "year": "2024",
+            "title": "06.04.2024",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/ksk_zad.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/ksk1_sol.pdf"
+        },
+        {
+            "year": "2023",
+            "title": "10.06.2023",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/2023_june_var1.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/2023_june_solutions_variant_1.pdf"
+        },
+        {
+            "year": "2023",
+            "title": "02.04.2023",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/2023_02_april-su-math-var-3.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/solutions-2023_april-su-math-var-3.pdf"
+        },
+        {
+            "year": "2022",
+            "title": "12.06.2022",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/aaa-ksk-tema-1.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/bbb-solutions-tema-1.pdf"
+        },
+        {
+            "year": "2022",
+            "title": "03.04.2022",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/2022-su-math-var-1.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/sites/default/files/documents/exams/2022-math-solutions.pdf"
+        }
+    ],
+    "dzi": [
+        {
+            "year": "2025",
+            "title": "23.05.2025",
+            "url_problems": "https://www.matematika.bg/izpiti/maturi/2025.pdf",
+            "url_answers": ""
+        },
+        {
+            "year": "2024",
+            "title": "20.05.2024",
+            "url_problems": "https://www.matematika.bg/izpiti/maturi/2024.pdf",
+            "url_answers": ""
+        },
+        {
+            "year": "2023",
+            "title": "23.05.2023",
+            "url_problems": "https://www.matematika.bg/izpiti/maturi/2023.pdf",
+            "url_answers": ""
+        },
+        {
+            "year": "2022",
+            "title": "20.05.2022",
+            "url_problems": "https://www.matematika.bg/izpiti/maturi/2022.pdf",
+            "url_answers": ""
+        },
+        {
+            "year": "2021",
+            "title": "21.05.2021",
+            "url_problems": "https://www.matematika.bg/izpiti/maturi/2021.pdf",
+            "url_answers": ""
+        },
+        {
+            "year": "2020",
+            "title": "03.06.2020",
+            "url_problems": "https://www.matematika.bg/izpiti/maturi/2020.pdf",
+            "url_answers": ""
+        }
+    ],
+    "boyanov": [
+        {
+            "year": "2024",
+            "title": "24.02.2024",
+            "url_problems": "https://www.fmi.uni-sofia.bg/bg/file/4076/download?token=FRelvx0m",
+            "url_answers": "https://www.fmi.uni-sofia.bg/bg/file/4077/download?token=E9Jr23s4"
+        },
+        {
+            "year": "2023",
+            "title": "25.02.2023",
+            "url_problems": "https://www.fmi.uni-sofia.bg/bg/file/3403/download?token=WSgrjVB-",
+            "url_answers": "https://www.fmi.uni-sofia.bg/bg/file/3402/download?token=RuV207zQ"
+        },
+        {
+            "year": "2020",
+            "title": "22.02.2020",
+            "url_problems": "https://www.fmi.uni-sofia.bg/bg/file/3287/download?token=sethyzeT",
+            "url_answers": "https://www.fmi.uni-sofia.bg/bg/file/3288/download?token=q72zQvRa"
+        },
+        {
+            "year": "2019",
+            "title": "23.02.2019",
+            "url_problems": "https://www.fmi.uni-sofia.bg/sites/default/files/2020_Turnir_Boyanov_Problems.pdf",
+            "url_answers": "https://www.fmi.uni-sofia.bg/bg/file/2625/download?token=8P6oGgJY"
+        },
+        {
+            "year": "2018",
+            "title": "24.02.2018",
+            "url_problems": "https://www.fmi.uni-sofia.bg/bg/file/1852/download?token=aviQNqPO",
+            "url_answers": "https://www.fmi.uni-sofia.bg/bg/file/1858/download?token=KSCEjff0"
+        }
+    ],
+    "olympiad": []
 }

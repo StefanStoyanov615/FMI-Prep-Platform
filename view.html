@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Преглед на документ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="viewer-body">
+
+    <a href="index.html" class="back-btn">← Назад към архива</a>
+
+    <!-- Рамка за PDF -->
+    <iframe id="pdf-viewer" class="pdf-frame" src=""></iframe>
+
+    <!-- Лента за изтегляне -->
+    <div class="download-bar">
+        Ако документът не се вижда, <a id="direct-link" href="#" class="download-link" target="_blank">изтеглете го от тук</a>.
+    </div>
+
+    <script>
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            const rawUrl = params.get('src');
+
+            if (rawUrl) {
+                // ТРИКЪТ: Използваме Google Viewer, за да покажем PDF-а
+                // Това заобикаля защитата на uni-sofia.bg
+                const googleProxyUrl = `https://docs.google.com/gview?url=${encodeURIComponent(rawUrl)}&embedded=true`;
+                
+                document.getElementById('pdf-viewer').src = googleProxyUrl;
+                
+                // Директният линк остава оригинален, за да може да се сваля
+                document.getElementById('direct-link').href = rawUrl;
+            } else {
+                alert("Грешка: Липсва връзка към файла.");
+                window.location.href = "index.html";
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+/* =========================================
+   1. ГЛОБАЛНИ ПРОМЕНЛИВИ И НАСТРОЙКИ
+   ========================================= */
+:root {
+    --primary: #003366; /* Тъмносиньо (ФМИ/СУ) */
+    --primary-light: #e3f2fd; /* Светлосиньо за фон на бутони */
+    --accent: #fca311; /* Оранжево (Акцент) */
+    --accent-light: #fff3e0; /* Светлооранжево */
+    --bg: #f4f7f6; /* Фон на сайта */
+    --white: #ffffff;
+    --text: #333;
+    --gray: #666;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+}
+
+/* =========================================
+   2. НАВИГАЦИЯ (NAVBAR)
+   ========================================= */
+.navbar {
+    background: var(--primary);
+    color: var(--white);
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--white);
+    letter-spacing: 0.5px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--white);
+    text-decoration: underline;
+}
+
+/* =========================================
+   3. ОСНОВНО СЪДЪРЖАНИЕ (LAYOUT)
+   ========================================= */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding-top: 1rem;
+}
+
+.hero h1 {
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
+}
+
+.hero p {
+    color: var(--gray);
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   4. СЕКЦИИ И ЗАГЛАВИЯ
+   ========================================= */
+.archive-section {
+    margin-bottom: 5rem;
+}
+
+.section-title {
+    border-left: 5px solid var(--accent);
+    padding-left: 15px;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+/* =========================================
+   5. МРЕЖА ОТ КАРТИ (GRID)
+   ========================================= */
+.grid {
+    display: grid;
+    /* Автоматично оразмеряване, минимум 280px ширина на карта */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* =========================================
+   6. ДИЗАЙН НА КАРТАТА (CARD)
+   ========================================= */
+.card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+    border: 1px solid #e0e0e0;
+
+    /* Flexbox за подредба (Header горе, Бутони долу) */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+    border-color: #d0d0d0;
+}
+
+/* Горна част на картата (Година и Заглавие) */
+.card-header {
+    margin-bottom: 20px;
+}
+
+.card-year {
+    font-size: 2rem;
+    font-weight: 800; /* Extra Bold */
+    color: var(--primary);
+    display: block;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.card-title {
+    font-size: 1rem;
+    color: var(--gray);
+    line-height: 1.4;
+}
+
+/* Долна част (Бутоните) */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+/* Общ стил за бутоните */
+.btn-card {
+    flex: 1; /* Равна ширина */
+    padding: 10px 5px;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Специфичен стил: Условие (Син) */
+.btn-problem {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid transparent;
+}
+
+.btn-problem:hover {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+/* Специфичен стил: Отговори (Оранжев) */
+.btn-answer {
+    background-color: var(--accent-light);
+    color: #e65100; /* Тъмно оранжево за текст */
+    border: 1px solid transparent;
+}
+
+.btn-answer:hover {
+    background-color: var(--accent);
+    color: #000;
+}
+
+/* =========================================
+   7. СТРАНИЦА ЗА ПРЕГЛЕД (VIEW.HTML)
+   ========================================= */
+.viewer-body {
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: #333;
+}
+
+.back-btn {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    background: var(--white);
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-btn:hover {
+    transform: translateY(-2px);
+    background: #f0f0f0;
+}
+
+.pdf-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #555; /* Тъмен фон докато зарежда */
+}
+
+.download-bar {
+    background: #222;
+    color: #ccc;
+    text-align: center;
+    padding: 12px;
+    font-size: 0.9rem;
+    border-top: 1px solid #444;
+}
+
+.download-link {
+    color: var(--accent);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.download-link:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   8. МОБИЛНА ВЕРСИЯ
+   ========================================= */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .grid {
+        grid-template-columns: 1fr; /* Една колона на мобилни */
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+}

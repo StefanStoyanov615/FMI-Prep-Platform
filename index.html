@@ -3,57 +3,103 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>FMI Prep Platform</title>
-        <link rel="stylesheet" href="css/style.css" />
+        <title>Архив Математика</title>
+        <!-- ВАЖНО: Вече не е css/style.css, а само style.css -->
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <nav class="navbar">
-            <a href="#" class="navbar-brand">FMI Prep</a>
+            <a href="#" class="brand">ФМИ Платформа за Подготовка</a>
         </nav>
 
         <div class="container">
             <header class="hero">
-                <h1>Подготовка за ФМИ</h1>
-                <p>Всички тестове и матури на едно място</p>
+                <h1>Платформа за подготовка за кандидастване във ФМИ</h1>
+                <p>Бърз достъп до всички изпити и състезания, с които можеш да влезнеш във фми</p>
             </header>
 
-            <!-- University Exams -->
-            <h2 class="section-title">Кандидат-студентски изпити</h2>
-            <div id="uni-grid" class="grid">Loading...</div>
+            <!-- Секциите -->
+            <section id="uni" class="archive-section">
+                <h2 class="section-title">Кандидат-студентски изпити</h2>
+                <div id="uni-grid" class="grid">Зареждане...</div>
+            </section>
 
-            <!-- Matura Exams -->
-            <h2 class="section-title">Държавни зрелостни изпити</h2>
-            <div id="matura-grid" class="grid">Loading...</div>
+            <section id="dzi" class="archive-section">
+                <h2 class="section-title">Държавни зрелостни изпити ПП</h2>
+                <div id="dzi-grid" class="grid">Зареждане...</div>
+            </section>
+
+            <section id="boyanov" class="archive-section">
+                <h2 class="section-title">Турнир "Проф. Б. Боянов"</h2>
+                <div id="boyanov-grid" class="grid">Зареждане...</div>
+            </section>
+
+            <section id="olimpiadi" class="archive-section">
+                <h2 class="section-title">Олимпиади</h2>
+                <div id="olimpiadi-grid" class="grid">Зареждане...</div>
+            </section>
         </div>
 
         <script>
             window.onload = async () => {
                 try {
-                    const res = await fetch("registry.json");
-                    const data = await res.json();
+                    // ВАЖНО: Търсим файла в същата папка, не в data/
+                    const response = await fetch("registry.json");
+                    const data = await response.json();
 
-                    renderGrid("uni-grid", data.university);
-                    renderGrid("matura-grid", data.matura);
-                } catch (err) {
-                    console.error(err);
-                    alert("Грешка при зареждане на данните.");
+                    populateGrid("uni-grid", data.ksi);
+                    populateGrid("dzi-grid", data.dzi);
+                    populateGrid("olimpiadi-grid", data.olimpiadi);
+                    populateGrid("boyanov-grid", data.boyanov);
+                } catch (error) {
+                    console.error("Грешка:", error);
+                    document.querySelector(".container").innerHTML =
+                        "<h1>Грешка!</h1><p>Не мога да намеря файл <b>registry.json</b>. Уверете се, че е в същата папка като index.html</p>";
                 }
             };
 
-            function renderGrid(elementId, items) {
+            function populateGrid(elementId, items) {
                 const container = document.getElementById(elementId);
+
                 if (!items || items.length === 0) {
-                    container.innerHTML = "<p>Няма налични тестове.</p>";
+                    container.innerHTML = "<p style='color:#777'>Няма налични материали.</p>";
                     return;
                 }
+
                 container.innerHTML = items
-                    .map(
-                        (item) => `
-                <a href="practice.html?id=${item.id}" class="card">
-                    <div class="card-year">${item.year}</div>
-                </a>
-            `,
-                    )
+                    .map((item) => {
+                        // Проверка дали има линк за отговори
+                        const hasAnswers = item.url_answers && item.url_answers.trim() !== "";
+
+                        return `
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-year">${item.year}</span>
+                        <div class="card-title">${item.title}</div>
+                    </div>
+                    
+                    <div class="card-actions">
+                        <!-- Бутон Условие -->
+                        <a href="view.html?src=${encodeURIComponent(item.url_problems)}" 
+                           class="btn-card btn-problem" 
+                           target="_blank">
+                           Условия
+                        </a>
+
+                        <!-- Бутон Отговори (показва се само ако има линк) -->
+                        ${
+                            hasAnswers
+                                ? `<a href="view.html?src=${encodeURIComponent(item.url_answers)}" 
+                                  class="btn-card btn-answer" 
+                                  target="_blank">
+                                  Отговори
+                               </a>`
+                                : ""
+                        }
+                    </div>
+                </div>
+                `;
+                    })
                     .join("");
             }
         </script>
