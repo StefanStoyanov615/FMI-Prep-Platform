@@ -4,7 +4,6 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Архив Математика</title>
-        <!-- ВАЖНО: Вече не е css/style.css, а само style.css -->
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
@@ -18,15 +17,14 @@
                 <p>Бърз достъп до всички изпити и състезания, с които можеш да влезнеш във фми</p>
             </header>
 
-            <!-- Секциите -->
             <section id="uni" class="archive-section">
                 <h2 class="section-title">Кандидат-студентски изпити</h2>
                 <div id="uni-grid" class="grid">Зареждане...</div>
             </section>
 
-            <section id="dzi" class="archive-section">
-                <h2 class="section-title">Държавни зрелостни изпити ПП</h2>
-                <div id="dzi-grid" class="grid">Зареждане...</div>
+            <section id="matura" class="archive-section">
+                <h2 class="section-title">Матури (ДЗИ)</h2>
+                <div id="matura-grid" class="grid">Зареждане...</div>
             </section>
 
             <section id="boyanov" class="archive-section">
@@ -34,27 +32,27 @@
                 <div id="boyanov-grid" class="grid">Зареждане...</div>
             </section>
 
-            <section id="olimpiadi" class="archive-section">
+            <section id="olympiad" class="archive-section">
                 <h2 class="section-title">Олимпиади</h2>
-                <div id="olimpiadi-grid" class="grid">Зареждане...</div>
+                <div id="olympiad-grid" class="grid">Зареждане...</div>
             </section>
         </div>
 
         <script>
             window.onload = async () => {
                 try {
-                    // ВАЖНО: Търсим файла в същата папка, не в data/
                     const response = await fetch("registry.json");
                     const data = await response.json();
 
-                    populateGrid("uni-grid", data.ksi);
-                    populateGrid("dzi-grid", data.dzi);
-                    populateGrid("olimpiadi-grid", data.olimpiadi);
+                    // Използваме ключовете от твоя нов registry.json (ksi, dzi, boyanov, olimpiadi)
+                    populateGrid("uni-grid", data.ksi || data.university); // Поддържа и старо и ново име
+                    populateGrid("matura-grid", data.dzi || data.matura);
+                    populateGrid("olympiad-grid", data.olimpiadi || data.olympiad);
                     populateGrid("boyanov-grid", data.boyanov);
                 } catch (error) {
                     console.error("Грешка:", error);
                     document.querySelector(".container").innerHTML =
-                        "<h1>Грешка!</h1><p>Не мога да намеря файл <b>registry.json</b>. Уверете се, че е в същата папка като index.html</p>";
+                        "<h1>Грешка!</h1><p>Не мога да намеря файл <b>registry.json</b>.</p>";
                 }
             };
 
@@ -70,6 +68,7 @@
                     .map((item) => {
                         // Проверка дали има линк за отговори
                         const hasAnswers = item.url_answers && item.url_answers.trim() !== "";
+                        const hasProblems = item.url_problems && item.url_problems.trim() !== "";
 
                         return `
                 <div class="card">
@@ -80,21 +79,25 @@
                     
                     <div class="card-actions">
                         <!-- Бутон Условие -->
-                        <a href="view.html?src=${encodeURIComponent(item.url_problems)}" 
-                           class="btn-card btn-problem" 
-                           target="_blank">
-                           Условия
-                        </a>
+                        ${
+                            hasProblems
+                                ? `<a href="${item.url_problems}" 
+                                  class="btn-card btn-problem" 
+                                  target="_blank">
+                                  Условие
+                               </a>`
+                                : `<span class="btn-card btn-disabled">Няма условие</span>`
+                        }
 
-                        <!-- Бутон Отговори (показва се само ако има линк) -->
+                        <!-- Бутон Отговори -->
                         ${
                             hasAnswers
-                                ? `<a href="view.html?src=${encodeURIComponent(item.url_answers)}" 
+                                ? `<a href="${item.url_answers}" 
                                   class="btn-card btn-answer" 
                                   target="_blank">
                                   Отговори
                                </a>`
-                                : ""
+                                : "" // Ако няма отговори, не показваме нищо
                         }
                     </div>
                 </div>
