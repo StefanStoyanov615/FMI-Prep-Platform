@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Архив Математика</title>
+        <title>FMI Prep Platform</title>
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
@@ -44,8 +44,7 @@
                     const response = await fetch("registry.json");
                     const data = await response.json();
 
-                    // Използваме ключовете от твоя нов registry.json (ksi, dzi, boyanov, olimpiadi)
-                    populateGrid("uni-grid", data.ksi || data.university); // Поддържа и старо и ново име
+                    populateGrid("uni-grid", data.ksi || data.university);
                     populateGrid("matura-grid", data.dzi || data.matura);
                     populateGrid("olympiad-grid", data.olimpiadi || data.olympiad);
                     populateGrid("boyanov-grid", data.boyanov);
@@ -66,7 +65,6 @@
 
                 container.innerHTML = items
                     .map((item) => {
-                        // Проверка дали има линк за отговори
                         const hasAnswers = item.url_answers && item.url_answers.trim() !== "";
                         const hasProblems = item.url_problems && item.url_problems.trim() !== "";
 
@@ -97,7 +95,7 @@
                                   target="_blank">
                                   Отговори
                                </a>`
-                                : "" // Ако няма отговори, не показваме нищо
+                                : ""
                         }
                     </div>
                 </div>
